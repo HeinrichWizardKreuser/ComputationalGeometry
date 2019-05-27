@@ -149,6 +149,11 @@ public class Point implements Comparable<Point> {
 		return new Point(this.x - x, this.y - y);
 	}
 
+	/* Gets the area of the triangle with corners d, e, f */
+	public static double area(Point d, Point e, Point f){
+		return Math.abs(d.x*(e.y-f.y)+e.x*(f.y-d.y)+f.x*(d.y-e.y))/2.0;
+	}
+
 	/*****************************************************************************
    *                           VECTOR MATH
    ****************************************************************************/
@@ -227,14 +232,47 @@ public class Point implements Comparable<Point> {
 	 */
 	@Override
   public int compareTo(Point p) {
-		if (epsilon(this.y, p.y)) {
-			if (epsilon(this.x, p.x)) {
+		if (epsilon(this.x, p.x)) {
+			if (epsilon(this.y, p.y)) {
 				return 0;
 			}
 			return this.y < p.y ? -1 : +1;
 		}
 		return this.x < p.x ? -1 : +1;
   }
+
+	/**
+	 * Creates an array of points with x and y values from the given array
+	 * @param coords the list of x and y coordinates to construct an array of
+	 * 				points of
+	 * @return an array of points of which each point has the x coordinate of every
+	 *				 odd index, and y coordinate of every even index
+	 */
+	public static Point[] arrxy(double... coords) {
+		int n = coords.length;
+		Point[] arr = new Point[n/2];
+		for (int i = 0; i < n; i += 2) {
+			arr[i/2] = new Point(coords[i], coords[i+1]);
+		}
+		return arr;
+	}
+
+	/**
+	 * Creates an array of points with x, y and z values from the given array
+	 * @param coords the list of x, y and z coordinates to construct an array of
+	 * 				points of
+	 * @return an array of points of which each point has the x, y and z coordinate
+	 *				 of every 1st, 2nd and 3rd index respectively
+	 * Example: arrxyz(1,2,3,4,5,6) = points (1,2,3) and (4,5,6)
+	 */
+	public static Point[] arrxyz(double... coords) {
+		int n = coords.length;
+		Point[] arr = new Point[n/3];
+		for (int i = 0; i < n; i += 3) {
+			arr[i/3] = new Point(coords[i], coords[i+1], coords[i+2]);
+		}
+		return arr;
+	}
 
 	/*****************************************************************************
    *                           INTERSECTION
@@ -249,29 +287,29 @@ public class Point implements Comparable<Point> {
 	public static boolean intersects(Point a, Point b, Point c, Point d) {
 		// Find the four orientations needed for general and
 		// special cases
-		int o1 = orientation(a, b, c);
-		int o2 = orientation(a, b, d);
-		int o3 = orientation(c, d, a);
-		int o4 = orientation(c, d, b);
+		String o1 = orientation(a, b, c);
+		String o2 = orientation(a, b, d);
+		String o3 = orientation(c, d, a);
+		String o4 = orientation(c, d, b);
 		// General case
-		if (o1 != o2 && o3 != o4) {
+		if (!o1.equals(o2) && !o3.equals(o4)) {
 			return true;
 		}
 		// Special Cases
 		// a, b and c are colinear and c lies on segment ab
-		if (o1 == 0 && onSegment(a, c, b)) {
+		if (o1.equals("colinear") && onSegment(a, c, b)) {
 			return true;
 		}
 		// a, b and d are colinear and d lies on segment ab
-		if (o2 == 0 && onSegment(a, d, b)) {
+		if (o2.equals("colinear") && onSegment(a, d, b)) {
 			return true;
 		}
 		// c, d and a are colinear and a lies on segment cd
-		if (o3 == 0 && onSegment(c, a, d)) {
+		if (o3.equals("colinear") && onSegment(c, a, d)) {
 			return true;
 		}
 		// c, d and b are colinear and b lies on segment cd
-		if (o4 == 0 && onSegment(c, b, d)) {
+		if (o4.equals("colinear") && onSegment(c, b, d)) {
 			return true;
 		}
 		return false; // Doesn't fall in any of the above cases
@@ -283,28 +321,63 @@ public class Point implements Comparable<Point> {
 
 	/**
 	 * To find orientation of ordered triplet (p, q, r).
-	 * The function returns following values
-	 * 0 --> p, q and r are colinear
-	 * 1 --> Clockwise
-	 * 2 --> Counterclockwise
 	 * See https://www.geeksforgeeks.org/orientation-3-ordered-points/
 	 * for details of below formula.
+	 *
+	 * @param p,q,r are the points to check colinearcy of
+	 * @return a string description of the orientation of the points
 	 */
-	private static int orientation(Point p, Point q, Point r) {
+	public static String orientation(Point p, Point q, Point r) {
 		double val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
 		if (val == 0) {
-			return 0; // colinear
+			return "colinear"; // colinear
 		}
-		return val > 0 ? 1 : 2; // clock or counterclock wise
+		return val > 0 ? "clockwise" : "counterclockwise";
 	}
 
 	/**
 	 * Given three colinear points p, q, r, the function checks if
 	 * point q lies on line segment 'pr'
 	 */
-	private static boolean onSegment(Point p, Point q, Point r) {
+	public static boolean onSegment(Point p, Point q, Point r) {
 		return
 			q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) &&
 			q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
 	}
+
+	/**
+	 * Checks if this point is inside the given polygon
+	 *
+	 * @param poly is a collection of points that represent the corners of a polygon
+	 * @return true if this point is contained within the given polygon
+	 */
+	public boolean isInside(Point[] poly) {
+		int n = poly.length;
+		// There must be at least 3 vertices in polygon[]
+		if (n < 3) return false;
+		// Create a point for line segment from p to relative infinity
+		double extremeX = poly[0].x;
+		for (int i = 1; i < n; i++) {
+			extremeX = Math.max(extremeX, poly[i].x);
+		}
+		Point extreme = new Point(extremeX+1, this.y);
+		// Count intersections of the above line with sides of polygon
+		int count = 0;
+		// check with all lines that contain this point
+		loop:
+		for (int i = 0; i < n; i++) {
+			Point a = poly[i];
+			if (equals(a)) return true; // if this point is a corner of shape
+			int j = i+1 == n ? 0 : i+1;
+			Point b = poly[j];
+			// atleast one of a or b must be above and under p respectively
+			if (a.y < y && b.y < y) continue loop;
+			if (a.y > y && b.y > y) continue loop;
+			// Check if the line intersects:
+			if (intersects(a, b, this, extreme)) count++;
+		}
+		// Return true if count is odd, false otherwise
+		return count%2 == 1;
+	}
+
 }

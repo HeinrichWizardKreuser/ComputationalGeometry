@@ -50,7 +50,11 @@ public class Angle implements Comparable<Angle> {
   public Angle(Point p, Point relativeTo) {
     double x = p.x-relativeTo.x;
     double y = p.y-relativeTo.y;
-    this.angle = regulate(getAngle(x, y));
+    double angle = regulate(getAngle(x, y));
+    if (epsilon(angle, (int)angle)) {
+      angle = (int)angle;
+    }
+    this.angle = angle;
   }
 
   /**
@@ -58,6 +62,13 @@ public class Angle implements Comparable<Angle> {
    */
   public Angle(double degrees) {
     this.angle = regulate(degrees);
+  }
+
+  /**
+   * Constructs an angle that is the average of the given angles
+   */
+  public Angle(Angle a, Angle b) {
+    this.angle = regulate(a.angle + b.angle)/2;
   }
 
   /*****************************************************************************
@@ -262,6 +273,21 @@ public class Angle implements Comparable<Angle> {
   public double absDiff(double d) {
     return absDiff(new Angle(d));
   }
+
+  /**
+   * Checks whether the given values are within one epsilon difference from
+   * each other. If they are, they are considered to be equal. This is for when
+   * number calculations have a slight error.
+   */
+  public static boolean epsilon(double a, double b) {
+    return Math.abs(a-b) < EPSILON;
+  }
+
+  /*
+   * If two values have < EPSILON diifference from each other, they are
+   * considered to be equal
+   */
+  public static final double EPSILON = 1E-6;
 
   /*****************************************************************************
    *                            POINT INTERACTION
