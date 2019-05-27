@@ -40,20 +40,20 @@ public class Point implements Comparable<Point> {
 	/* The x, y and z coordinates of this point */
 	public double x = 0d;
 	public double y = 0d;
-  public double z = 0d;
+	public double z = 0d;
 
 	/*****************************************************************************
 	 *                           CONSTRUCTORS
 	 ****************************************************************************/
 	 /* 2d constructor */
 	public Point(double x, double y) {
-    setTo(x, y);
-  }
+		setTo(x, y);
+	}
 
 	/* 3d constructor */
-  public Point(double x, double y, double z) {
-    setTo(x, y, z);
-  }
+	public Point(double x, double y, double z) {
+		setTo(x, y, z);
+	}
 
 	/**
 	 * Constructs a point from a given string
@@ -71,24 +71,24 @@ public class Point implements Comparable<Point> {
 			darr[i] = Double.parseDouble(sarr[i]);
 		}
 		if (n == 2) {
-      setTo(darr[0], darr[1]);
-    } else if (n == 3) {
-      setTo(darr[0], darr[1], darr[2]);
+			setTo(darr[0], darr[1]);
+		} else if (n == 3) {
+			setTo(darr[0], darr[1], darr[2]);
 		} else {
 			throw new IllegalArgumentException("Invalid dimension size " + n + " for "
-			 + s + "!!");
+			+ s + "!!");
 		}
 	}
 
 	/* Constructor for array */
 	public Point(double[] arr) {
-    if (arr.length == 2) {
-      setTo(arr[0], arr[1]);
-    } else if (arr.length == 3) {
-      setTo(arr[0], arr[1], arr[2]);
-    } else {
-      throw new IllegalArgumentException("Invalid array size " + arr.length + "!!");
-    }
+	    if (arr.length == 2) {
+	      setTo(arr[0], arr[1]);
+	    } else if (arr.length == 3) {
+	      setTo(arr[0], arr[1], arr[2]);
+	    } else {
+	      throw new IllegalArgumentException("Invalid array size " + arr.length + "!!");
+	    }
 	}
 
 	/* Setter methods */
@@ -108,8 +108,8 @@ public class Point implements Comparable<Point> {
 	}
 
 	/*****************************************************************************
-   *                           XYZ MATH
-   ****************************************************************************/
+	*                           XYZ MATH
+	****************************************************************************/
 	/* Distance methods*/
 	public double dist(Point p) {
 		return Math.sqrt( (x-p.x)*(x-p.x) + (y-p.y)*(y-p.y) + (z-p.z)*(z-p.z) );
@@ -155,17 +155,17 @@ public class Point implements Comparable<Point> {
 	}
 
 	/*****************************************************************************
-   *                           VECTOR MATH
-   ****************************************************************************/
-  // determinant
+	*                           VECTOR MATH
+	****************************************************************************/
+  	// determinant
 	public double cross(Point p) {
 		return x * p.y - y * p.x;
 	}
 
 	// dot product
-  public double dot(Point p) {
-    return x * p.x + y * p.y + z * p.z;
-  }
+  	public double dot(Point p) {
+    		return x * p.x + y * p.y + z * p.z;
+  	}
 
 	/*****************************************************************************
 	 *                           EXTRAS
@@ -176,7 +176,7 @@ public class Point implements Comparable<Point> {
 			return "[" + x + ", " + y + "]";
 		}
 		return "[" + x + ", " + y + ", " + z + "]";
-  }
+  	}
 
 	/**
 	 * Converts this point to an array
@@ -198,7 +198,7 @@ public class Point implements Comparable<Point> {
 	public boolean equals(double x, double y) {
 		return epsilon(this.x, x) && epsilon(this.y, y);
 	}
-  public boolean equals(double x, double y, double z) {
+	public boolean equals(double x, double y, double z) {
 		return epsilon(this.x, x) && epsilon(this.y, y) && epsilon(this.z, z);
 	}
 
@@ -231,7 +231,7 @@ public class Point implements Comparable<Point> {
 	 * approach to delaunay triangulation of a map/collection of points
 	 */
 	@Override
-  public int compareTo(Point p) {
+	public int compareTo(Point p) {
 		if (epsilon(this.x, p.x)) {
 			if (epsilon(this.y, p.y)) {
 				return 0;
@@ -239,7 +239,7 @@ public class Point implements Comparable<Point> {
 			return this.y < p.y ? -1 : +1;
 		}
 		return this.x < p.x ? -1 : +1;
-  }
+	}
 
 	/**
 	 * Creates an array of points with x and y values from the given array
@@ -275,11 +275,11 @@ public class Point implements Comparable<Point> {
 	}
 
 	/*****************************************************************************
-   *                           INTERSECTION
+	 *                           INTERSECTION
 	 * The following are not my own work. You can find out more about the authors
 	 * and functions like these on the page I got this from:
 	 * https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-   ****************************************************************************/
+	 ****************************************************************************/
 	/**
 	 * Checks whether line segmen a-b and c-d are intersecting
 	 * @return true if line segement ab and cd intersects
@@ -340,8 +340,7 @@ public class Point implements Comparable<Point> {
 	 * point q lies on line segment 'pr'
 	 */
 	public static boolean onSegment(Point p, Point q, Point r) {
-		return
-			q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) &&
+		return  q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) &&
 			q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
 	}
 
