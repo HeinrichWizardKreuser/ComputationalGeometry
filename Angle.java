@@ -4,6 +4,10 @@
  * which a point lies relative to another, the difference in angles and whether
  * an angle is greater/less than another
  *
+ * DEPENDENCIES:
+ *  Point.java
+ * Available at: https://github.com/HeinrichWizardKreuser/ComputationalGeometry
+ *
  * @author Heinrich Kreuser
  *
  * Date: 25 May 2019
@@ -158,19 +162,6 @@ public class Angle implements Comparable<Angle> {
   }
 
   /**
-   * @param a is the angle to compare this angle to
-   * @return -1 if this angle is clockwise left of the given angle, +1 otherwise
-   */
-  @Override
-  public int compareTo(Angle a) {
-    double sin = sin(a.angle-this.angle);
-    if (sin == 0) {
-      return 0;
-    }
-    return sin < 0 ? -1 : +1;
-  }
-
-  /**
    * a < b if sin(b-a) > 0
    * @param b is the angle to check whether we are clockwise right of
    * @return true if this angle is clockwise right of the given angle
@@ -264,8 +255,8 @@ public class Angle implements Comparable<Angle> {
     if (colinearWith(a)) {
       return 180d;
     }
-    if (this.greaterThan(a)) {
-      return -this.minus(a);
+    if (greaterThan(a)) {
+      return minus(a);
     }
     return a.minus(this);
   }
@@ -288,6 +279,20 @@ public class Angle implements Comparable<Angle> {
    * considered to be equal
    */
   public static final double EPSILON = 1E-6;
+
+  /*****************************************************************************
+   *                              UTILITIES
+   ****************************************************************************/
+  /**
+   * Given 2 angles, returns them as an ordered pair based on angle.
+   */
+  public static Angle[] convexPair(Angle a, Angle b) {
+    Angle centre = new Angle(a, b);
+    if (a.lessThan(centre)) {
+      return new Angle[]{a, b};
+    }
+    return new Angle[]{b, a};
+  }
 
   /*****************************************************************************
    *                            POINT INTERACTION
@@ -348,5 +353,18 @@ public class Angle implements Comparable<Angle> {
   /** double parameter version of the above */
   public boolean equals(double theta) {
     return angle == theta;
+  }
+
+  /**
+   * @param a is the angle to compare this angle to
+   * @return -1 if this angle is clockwise left of the given angle, +1 otherwise
+   */
+  @Override
+  public int compareTo(Angle a) {
+    double sin = sin(a.angle-this.angle);
+    if (sin == 0) {
+      return 0;
+    }
+    return sin < 0 ? -1 : +1;
   }
 }
