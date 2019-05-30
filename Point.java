@@ -93,6 +93,13 @@ public class Point implements Comparable<Point> {
     }
 	}
 
+	/* Constructor for the average of two points */
+	public Point(Point a, Point b) {
+		this.x = (a.x + b.x)/2;
+		this.y = (a.y + b.y)/2;
+		this.z = (a.z + b.z)/2;
+	}
+
 	/* Setter methods */
 	public void setTo(Point p) {
 		this.x = p.x;
