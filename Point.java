@@ -176,6 +176,20 @@ public class Point implements Comparable<Point> {
 	public double len() {
 		return Math.sqrt(x*x, y*y, z*z);
 	}
+	/**
+	 * Gets the projection point if this point on line ab.
+	 * NOTE: This is not using point as vector, but a location.
+	 */
+	public Point proj(Point[] ab) {
+		Point u = ab[1].minus(ab[0]);
+		Point v = this.minus(ab[0]);
+		Point proj = u.scale(u.dot(v)/u.dot(u));
+		return proj.plus(ab[0]);
+	}
+	/* Gets the shortest distance to line ab */
+	public double dist(Point[] ab) {
+		return dist(proj(ab));
+	}
 
 	/*****************************************************************************
 	 *                           EXTRAS
