@@ -3,7 +3,7 @@
  * for classic location data types. Can also act as a vector for some vector
  * functions such as dot and cross product.
  *
- * The 3 methods in the "INTERSECTION" section are not my own work, you can find
+ * The methods in the "INTERSECTION" section are not my own work, you can find
  * the methods written in C (originally, I converted them to java) at
  * https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
  *
@@ -40,7 +40,7 @@ public class Point implements Comparable<Point> {
 	/* The x, y and z coordinates of this point */
 	public double x = 0d;
 	public double y = 0d;
-  public double z = 0d;
+	public double z = 0d;
 
 	public static final Point origin = new Point(0, 0, 0);
 
@@ -49,13 +49,13 @@ public class Point implements Comparable<Point> {
 	 ****************************************************************************/
 	 /* 2d constructor */
 	public Point(double x, double y) {
-    setTo(x, y);
-  }
+		setTo(x, y);
+	}
 
 	/* 3d constructor */
-  public Point(double x, double y, double z) {
-    setTo(x, y, z);
-  }
+	public Point(double x, double y, double z) {
+		setTo(x, y, z);
+	}
 
 	/**
 	 * Constructs a point from a given string
@@ -73,9 +73,9 @@ public class Point implements Comparable<Point> {
 			darr[i] = Double.parseDouble(sarr[i]);
 		}
 		if (n == 2) {
-      setTo(darr[0], darr[1]);
-    } else if (n == 3) {
-      setTo(darr[0], darr[1], darr[2]);
+			setTo(darr[0], darr[1]);
+		} else if (n == 3) {
+			setTo(darr[0], darr[1], darr[2]);
 		} else {
 			throw new IllegalArgumentException("Invalid dimension size " + n + " for "
 			 + s + "!!");
@@ -84,13 +84,13 @@ public class Point implements Comparable<Point> {
 
 	/* Constructor for array */
 	public Point(double[] arr) {
-    if (arr.length == 2) {
-      setTo(arr[0], arr[1]);
-    } else if (arr.length == 3) {
-      setTo(arr[0], arr[1], arr[2]);
-    } else {
-      throw new IllegalArgumentException("Invalid array size " + arr.length + "!!");
-    }
+	    if (arr.length == 2) {
+	      setTo(arr[0], arr[1]);
+	    } else if (arr.length == 3) {
+	      setTo(arr[0], arr[1], arr[2]);
+	    } else {
+	      throw new IllegalArgumentException("Invalid array size " + arr.length + "!!");
+	    }
 	}
 
 	/* Constructor for the average of two points */
@@ -117,8 +117,8 @@ public class Point implements Comparable<Point> {
 	}
 
 	/*****************************************************************************
-   *                           XYZ MATH
-   ****************************************************************************/
+	 *                           XYZ MATH
+	 ****************************************************************************/
 	/* Distance methods*/
 	public double dist(Point p) {
 		return Math.sqrt( (x-p.x)*(x-p.x) + (y-p.y)*(y-p.y) + (z-p.z)*(z-p.z) );
@@ -164,8 +164,8 @@ public class Point implements Comparable<Point> {
 	}
 
 	/*****************************************************************************
-   *                           VECTOR MATH
-   ****************************************************************************/
+	*                           VECTOR MATH
+	****************************************************************************/
  	// determinant
 	public double cross(Point p) {
 		return x * p.y - y * p.x;
@@ -207,7 +207,7 @@ public class Point implements Comparable<Point> {
 			return "[" + x + ", " + y + "]";
 		}
 		return "[" + x + ", " + y + ", " + z + "]";
-  }
+	}
 
 	/**
 	 * Converts this point to an array
@@ -229,7 +229,7 @@ public class Point implements Comparable<Point> {
 	public boolean equals(double x, double y) {
 		return epsilon(this.x, x) && epsilon(this.y, y);
 	}
-  public boolean equals(double x, double y, double z) {
+	public boolean equals(double x, double y, double z) {
 		return epsilon(this.x, x) && epsilon(this.y, y) && epsilon(this.z, z);
 	}
 
@@ -262,7 +262,7 @@ public class Point implements Comparable<Point> {
 	 * approach to delaunay triangulation of a map/collection of points
 	 */
 	@Override
-  public int compareTo(Point p) {
+	public int compareTo(Point p) {
 		if (epsilon(this.x, p.x)) {
 			if (epsilon(this.y, p.y)) {
 				return 0;
@@ -270,7 +270,7 @@ public class Point implements Comparable<Point> {
 			return this.y < p.y ? -1 : +1;
 		}
 		return this.x < p.x ? -1 : +1;
-  }
+	}
 
 	/*****************************************************************************
 	 *                          UTILITIES
@@ -313,7 +313,7 @@ public class Point implements Comparable<Point> {
 	 * The following are not my own work. You can find out more about the authors
 	 * and functions like these on the page I got this from:
 	 * https://www.geeksforgeeks.org/check-if-two-given-line-segments-intersect/
-   ****************************************************************************/
+	 ****************************************************************************/
 	/**
 	 * Checks whether line segmen a-b and c-d are intersecting
 	 * @return true if line segement ab and cd intersects
