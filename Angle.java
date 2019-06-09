@@ -72,7 +72,14 @@ public class Angle implements Comparable<Angle> {
    * Constructs an angle that is the average of the given angles
    */
   public Angle(Angle a, Angle b) {
-    this.angle = regulate(a.angle + b.angle)/2;
+    this.angle = min(a, b).plus(a.absDiff(b)/2);
+  }
+
+  // get angle of corner a-b-c
+  public Angle(Point a, Point b, Point c) {
+    Angle a_b = new Angle(a, b);
+    Angle c_b = new Angle(c, b);
+    this.angle = a_b.absDiff(c_b);
   }
 
   /*****************************************************************************
@@ -96,6 +103,9 @@ public class Angle implements Comparable<Angle> {
   public static double sin(double degrees) {
     return Math.sin(Math.toRadians(degrees));
   }
+  public double sin() {
+    return Math.sin(Math.toRadians(this.angle));
+  }
 
   /**
    * @return the asin of the given double
@@ -110,6 +120,9 @@ public class Angle implements Comparable<Angle> {
   public static double cos(double degrees) {
     return Math.cos(Math.toRadians(degrees));
   }
+  public double cos() {
+    return Math.cos(Math.toRadians(this.angle));
+  }
 
   /**
    * @return the acos of the given double
@@ -123,6 +136,9 @@ public class Angle implements Comparable<Angle> {
    */
   public static double tan(double degrees) {
     return Math.tan(Math.toRadians(degrees));
+  }
+  public double tan() {
+    return Math.tan(Math.toRadians(this.angle));
   }
 
   /**
@@ -292,6 +308,32 @@ public class Angle implements Comparable<Angle> {
       return new Angle[]{a, b};
     }
     return new Angle[]{b, a};
+  }
+
+  public static Angle min(Angle a, Angle b) {
+    if (a.lessThan(b)) {
+      return a;
+    }
+    return b;
+  }
+
+  public static Angle max(Angle a, Angle b) {
+    if (a.greaterThan(b)) {
+      return a;
+    }
+    return b;
+  }
+
+  /**
+   * Gets the bisector of the given angles. The area between min and max
+   * is inside the polygon. min is not neccesarily less than max
+   */
+  public static Angle bisector(Angle min, Angle max) {
+    Angle ave = new Angle(min, max);
+    if (ave.lessThan(min)) {
+      return new Angle(ave.angle+180);
+    }
+    return ave;
   }
 
   /*****************************************************************************
