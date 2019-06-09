@@ -9,7 +9,7 @@
  *
  * @author Heinrich Kreuser
  *
- * Date: 25 May 2019
+ * Date: 9 June 2019
  *
  *         MIT License
  *
@@ -179,23 +179,29 @@ public class Point implements Comparable<Point> {
 	public Point scale(double s) {
 		return new Point(s*x, s*y, s*z);
 	}
-	
+
 	public double len() {
-		return Math.sqrt(x*x, y*y, z*z);
+		return Math.sqrt(x*x + y*y + z*z);
 	}
 	/**
 	 * Gets the projection point if this point on line ab.
 	 * NOTE: This is not using point as vector, but a location.
 	 */
 	public Point proj(Point[] ab) {
-		Point u = ab[1].minus(ab[0]);
-		Point v = this.minus(ab[0]);
+		return proj(ab[0], ab[1]);
+	}
+	public Point proj(Point a, Point b) {
+		Point u = b.minus(a);
+		Point v = this.minus(a);
 		Point proj = u.scale(u.dot(v)/u.dot(u));
-		return proj.plus(ab[0]);
+		return proj.plus(a);
 	}
 	/* Gets the shortest distance to line ab */
 	public double dist(Point[] ab) {
-		return dist(proj(ab));
+		return dist(proj(ab[0], ab[1]));
+	}
+	public double dist(Point a, Point b) {
+		return dist(proj(a, b));
 	}
 
 	/*****************************************************************************
