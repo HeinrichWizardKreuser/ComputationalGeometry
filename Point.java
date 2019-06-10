@@ -163,6 +163,11 @@ public class Point implements Comparable<Point> {
 		return Math.abs(d.x*(e.y-f.y)+e.x*(f.y-d.y)+f.x*(d.y-e.y))/2.0;
 	}
 
+	/* Gets area of triangle in 3d using dot product method */
+	public static double area3d(Point a, Point b, Point c) {
+		return a.minus(b).cross(c.minus(b)).len()*0.5
+	}
+
 	/*****************************************************************************
 	*                           VECTOR MATH
 	****************************************************************************/
