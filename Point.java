@@ -167,8 +167,16 @@ public class Point implements Comparable<Point> {
 	*                           VECTOR MATH
 	****************************************************************************/
  	// determinant
-	public double cross(Point p) {
+	public double det(Point p) {
 		return x * p.y - y * p.x;
+	}
+	// cross product
+	public Point cross(Point p) {
+		return new Point(
+			y*p.z - z*p.y,
+			z*p.x - x*p.z,
+			x*p.y - y*p.x
+		);
 	}
 
 	// dot product
